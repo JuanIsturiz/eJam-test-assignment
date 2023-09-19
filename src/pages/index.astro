@@ -1,0 +1,18 @@
+---
+import TopBar from "../components/TopBar.tsx";
+import Layout from "../layouts/Layout.astro";
+---
+
+<!-- 
+	TopBar, 
+	Hero, 
+	Steps -> steps:{checked, active, label}, 
+	Product:{title, name, bigImage, smallImage, avgRating, leftInStock, price, description, details, discount}, 
+	Discount:{ammount }, 
+	Comments:{comments:[{profileImg, username, rating, isVerified, text}]}, 
+	Info: {payments}, 
+	Policy
+-->
+<Layout title="eJam Test Assignment">
+  <TopBar client:visible />
+</Layout>
