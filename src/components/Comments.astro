@@ -1,0 +1,41 @@
+---
+import verify from "../assets/icons/verify.svg";
+import star from "../assets/icons/star-filled.svg";
+
+export interface Props {
+  comments: IComment[];
+}
+
+const { comments } = Astro.props;
+---
+
+<div class="hidden lg:block">
+  {
+    comments.map(({ rating, user, text }) => (
+      <div class="bg-white py-6 px-4 rounded-lg">
+        <div class="flex gap-2 mb-6">
+          <img src={user.image} alt={`${user.username} profile picture`} />
+          <div>
+            <div class="flex gap-0.5">
+              {Array(Math.round(rating))
+                .fill(null)
+                .map((_) => (
+                  <img src={star.src} alt="Star icon" />
+                ))}
+            </div>
+            <div class="flex gap-2">
+              <p class="font-bold">{user.username}</p>
+              {user.isVerified && (
+                <div class="flex gap-3 items-center">
+                  <img src={verify.src} alt="Verify icon" />
+                  <p class="text-verified-green text-sm">Verified Customer</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        <p class="text-default-gray">"{text}"</p>
+      </div>
+    ))
+  }
+</div>

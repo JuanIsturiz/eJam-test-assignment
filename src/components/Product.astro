@@ -4,8 +4,6 @@ import checkbox from "../assets/icons/checkbox.svg";
 import tick from "../assets/icons/tick.svg";
 import percentage from "../assets/icons/percentage.svg";
 import rightArrow from "../assets/icons/arrow-right.svg";
-import verify from "../assets/icons/verify.svg";
-import star from "../assets/icons/star-filled.svg";
 import lock from "../assets/icons/lock.svg";
 import guarantee from "../assets/images/guarantee.svg";
 
@@ -16,6 +14,7 @@ import mastercard from "../assets/icons/mastercard.svg";
 import googlePay from "../assets/icons/gpay.svg";
 import applePay from "../assets/icons/apple-pay.svg";
 import amex from "../assets/icons/amex.svg";
+import Comments from "./Comments.astro";
 
 const payments = [
   { icon: visa.src, alt: "Visa" },
@@ -42,7 +41,7 @@ export interface Props {
   details: {
     normal: string;
     important: string;
-    direction: "t-i" | "i-t";
+    direction: "n-i" | "i-n";
   }[];
   discount?: number;
   comments: IComment[];
@@ -68,16 +67,34 @@ const {
 const eachPrice = Math.floor((price - price * (discount / 100)) / quantity);
 ---
 
-<article class="px-12">
-  <div class="bg-light-gray rounded p-8">
-    <div class="grid grid-cols-2 gap-6 mb-6">
+<article class="px-2 lg:px-12">
+  <div class="bg-light-gray rounded p-2 lg:p-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <!-- Title Mobile -->
+      <h4 class="block lg:hidden text-[1.7rem] text-center">
+        {
+          oneTime && (
+            <span class="uppercase text-light-blue">one time only </span>
+          )
+        }
+        {
+          isBundle && discount && (
+            <span class="capitalize leading-normal">
+              special price for {quantity} extra {titleName} for only{" "}
+              <span class="text-light-blue">${eachPrice} each</span> ($
+              {(price - price * (discount / 100)).toFixed(2)} total!)
+            </span>
+          )
+        }
+        {!isBundle && <span>{titleName}</span>}
+      </h4>
       <!-- Big Image -->
-      <div class="flex justify-end">
+      <div class="flex justify-center lg:justify-end">
         <img src={bigImage} alt={`${name} picture`} />
       </div>
       <div>
-        <!-- Title -->
-        <h4 class="text-3xl">
+        <!-- Title Desktop -->
+        <h4 class="hidden lg:block text-3xl">
           {
             oneTime && (
               <span class="uppercase text-light-blue">one time only </span>
@@ -94,14 +111,18 @@ const eachPrice = Math.floor((price - price * (discount / 100)) / quantity);
           }
           {!isBundle && <span>{titleName}</span>}
         </h4>
-        <div class="flex gap-6">
+        <div class="flex gap-2 lg:gap-6 items-center lg:items-start">
           <!-- Small Image -->
           <div>
-            <img src={smallImage} alt={`${name} picture`} class="w-52" />
+            <img
+              src={smallImage}
+              alt={`${name} picture`}
+              class="w-28 lg:w-52"
+            />
           </div>
           <!-- Name and Price -->
-          <div class="mb-6">
-            <div class="flex justify-between mb-2">
+          <div class="lg:mb-6">
+            <div class="flex justify-between gap-4 lg:gap-0 mb-2">
               <h6 class="font-medium text-lg">{name}</h6>
               {!discount && <p>${price}</p>}
               {
@@ -130,23 +151,27 @@ const eachPrice = Math.floor((price - price * (discount / 100)) / quantity);
               <img src={checkbox.src} alt="Checkbox icon" />
               <p class="text-default-gray">{leftInStock} left in Stock</p>
             </div>
-            <!-- Description -->
-            <p class="text-default-gray">{description}</p>
+            <!-- Description Desktop -->
+            <p class="hidden lg:block text-default-gray">{description}</p>
           </div>
         </div>
+        <!-- Description Mobile -->
+        <p class="block lg:hidden text-default-gray mt-2 text-center mb-6">
+          {description}
+        </p>
         <!-- Details -->
         <div class="space-y-4 mb-8">
           {
             details.map((detail) => (
               <div class="flex items-center gap-3">
                 <img src={tick.src} alt="Tick icon" class="w-6" />
-                {detail.direction === "t-i" ? (
-                  <p class="text-default-gray">
+                {detail.direction === "n-i" ? (
+                  <p class="text-sm sm:text-base text-default-gray">
                     <span>{detail.normal}</span>{" "}
                     <span class="font-bold">{detail.important}</span>
                   </p>
                 ) : (
-                  <p class="text-default-gray">
+                  <p class="text-sm sm:text-base text-default-gray">
                     <span class="font-bold">{detail.important}</span>{" "}
                     <span>{detail.normal}</span>
                   </p>
@@ -161,7 +186,7 @@ const eachPrice = Math.floor((price - price * (discount / 100)) / quantity);
             <div>
               <div class="bg-extra-light-blue p-3 flex items-center gap-4 rounded-xl mb-8">
                 <img src={percentage.src} alt="Percentage icon" />
-                <p class="text-lg">
+                <p class="text-sm lg:text-lg">
                   Save <span class="text-light-blue">{discount}%</span> and get{" "}
                   <span class="text-light-blue">{quantity}</span> extra{" "}
                   <span class="text-light-blue">{name}</span> for only{" "}
@@ -169,7 +194,7 @@ const eachPrice = Math.floor((price - price * (discount / 100)) / quantity);
                 </p>
               </div>
               <button class="w-full flex gap-4 bg-discount-green items-center justify-center p-4 rounded-full">
-                <p class="uppercase text-white font-medium text-xl">
+                <p class="uppercase text-white font-medium text-lg lg:text-xl">
                   yes - claim my discount
                 </p>
                 <img src={rightArrow.src} alt="Right arrow icon" />
@@ -179,47 +204,34 @@ const eachPrice = Math.floor((price - price * (discount / 100)) / quantity);
         }
       </div>
     </div>
-    <div class="grid grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Comments -->
+      <Comments comments={comments} />
       <div>
-        {
-          comments.map((comment) => (
-            <div class="bg-white py-6 px-4 rounded-lg">
-              <div class="flex gap-2 mb-6">
-                <img
-                  src={comment.user.image}
-                  alt={`${comment.user.username} profile picture`}
-                />
-                <div>
-                  <div class="flex gap-0.5">
-                    {Array(Math.round(avgRating))
-                      .fill(null)
-                      .map((_) => (
-                        <img src={star.src} alt="Star icon" />
-                      ))}
-                  </div>
-                  <div class="flex gap-2">
-                    <p class="font-bold">{comment.user.username}</p>
-                    {comment.user.isVerified && (
-                      <div class="flex gap-3 items-center">
-                        <img src={verify.src} alt="Verify icon" />
-                        <p class="text-verified-green text-sm">
-                          Verified Customer
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <p class="text-default-gray">"{comment.text}"</p>
-            </div>
-          ))
-        }
-      </div>
-      <!-- Info -->
-      <div>
+        <!-- Info Mobile -->
         <div
-          class="flex p-2 border-[3px] border-gray-300 text-default-gray rounded justify-between items-center"
+          class="block p-2 border-[3px] text-sm border-gray-300 text-default-gray rounded xl:hidden"
+        >
+          <div class="flex justify-evenly items-center">
+            <p>Free Shipping</p>
+            <div class="w-[1px] h-5 bg-default-gray opacity-40"></div>
+            <div class="flex items-center gap-2">
+              <img src={lock.src} alt="Lock icon" class="w-4" />
+              <p>Secure 256-Bit SSL Encryption.</p>
+            </div>
+          </div>
+          <div class="w-full h-[1px] bg-default-gray opacity-40 my-1"></div>
+          <div class="flex gap-1 justify-center">
+            {
+              payments.map((payment) => (
+                <img src={payment.icon} alt={payment.alt} class="w-8" />
+              ))
+            }
+          </div>
+        </div>
+        <!-- Info Desktop -->
+        <div
+          class="hidden xl:flex p-2 border-[3px] border-gray-300 text-default-gray rounded justify-between items-center"
         >
           Free Shipping
           <div class="w-[1px] h-5 bg-default-gray opacity-40"></div>
@@ -244,11 +256,9 @@ const eachPrice = Math.floor((price - price * (discount / 100)) / quantity);
         <!-- Guarantee -->
         <div class="flex items-center gap-4">
           <img src={guarantee.src} alt="Guarantee" />
-          <div class="text-default-gray text-lg">
-            <p class="w-11/12">
+          <div class="text-default-gray text-sm lg:text-lg">
+            <p class="lg:w-11/12">
               If you are not completely thrilled with your Clarifion - We have a
-
-
               <span class="font-bold">30 day satisfaction guarantee</span>.
               Please refer to our return policy at the bottom of the page for
               more details.

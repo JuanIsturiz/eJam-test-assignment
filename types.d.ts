@@ -13,7 +13,7 @@ interface IComment {
 interface Detail {
   normal: string;
   important: string;
-  direction: "t-i" | "i-t";
+  direction: "n-i" | "i-n";
 }
 
 interface Product {

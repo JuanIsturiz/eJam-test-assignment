@@ -2,7 +2,6 @@
 import Hero from "../components/Hero.astro";
 import Product from "../components/Product.astro";
 import Steps from "../components/Steps.astro";
-import TopBar from "../components/TopBar.tsx";
 import Layout from "../layouts/Layout.astro";
 
 import bigImage from "../assets/images/product-with-details.svg";
@@ -26,17 +25,17 @@ const product: Product = {
     {
       normal: "Negative Ion Technology may",
       important: "help with allergens",
-      direction: "t-i",
+      direction: "n-i",
     },
     {
       normal: "Designed for",
       important: "air rejuvenation",
-      direction: "t-i",
+      direction: "n-i",
     },
     {
       normal: "in all types of places",
       important: "Perfect for every room",
-      direction: "i-t",
+      direction: "i-n",
     },
   ],
   discount: 53,
@@ -54,19 +53,10 @@ const product: Product = {
 };
 ---
 
-<!-- 
-	//todo: TopBar, 
-	//todo: Hero, 
-	// todo: Steps -> steps:[{checked, active, label}], 
-	todo: Product:{title, name, bigImage, smallImage, avgRating, leftInStock, price, description, details, discount}, 
-	todo: Discount:{ammount }, 
-	todo: Comments:{comments:[{profileImg, username, rating, isVerified, text}]}, 
-	todo: Info: {payments}, 
-	todo: Policy
--->
 <Layout title="eJam Test Assignment">
-  <TopBar client:visible />
-  <Hero />
-  <Steps />
-  <Product {...product} />
+  <main class="mb-4">
+    <Hero />
+    <Steps />
+    <Product {...product} />
+  </main>
 </Layout>

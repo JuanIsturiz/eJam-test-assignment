@@ -1,3 +1,15 @@
+# eJam test assignment
+
+Hello again!! Welcome to my prototype of a product page for eJam test assignment.
+
+---
+
+Thank you for joining me in my coding journey!!
+
+### Description
+
+A responsive and dynamic product page made with astro, react and tailwind.
+
 # Astro Starter Kit: Basics
 
 ```sh
