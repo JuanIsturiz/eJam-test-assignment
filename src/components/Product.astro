@@ -1,0 +1,262 @@
+---
+import starRounded from "../assets/icons/star-filled-rounded.svg";
+import checkbox from "../assets/icons/checkbox.svg";
+import tick from "../assets/icons/tick.svg";
+import percentage from "../assets/icons/percentage.svg";
+import rightArrow from "../assets/icons/arrow-right.svg";
+import verify from "../assets/icons/verify.svg";
+import star from "../assets/icons/star-filled.svg";
+import lock from "../assets/icons/lock.svg";
+import guarantee from "../assets/images/guarantee.svg";
+
+import visa from "../assets/icons/visa.svg";
+import shopPay from "../assets/icons/shop-pay.svg";
+import paypal from "../assets/icons/paypal.svg";
+import mastercard from "../assets/icons/mastercard.svg";
+import googlePay from "../assets/icons/gpay.svg";
+import applePay from "../assets/icons/apple-pay.svg";
+import amex from "../assets/icons/amex.svg";
+
+const payments = [
+  { icon: visa.src, alt: "Visa" },
+  { icon: shopPay.src, alt: "Shop pay" },
+  { icon: paypal.src, alt: "Paypal" },
+  { icon: mastercard.src, alt: "Mastercard" },
+  { icon: googlePay.src, alt: "Google pay" },
+  { icon: applePay.src, alt: "Apple pay" },
+  { icon: amex.src, alt: "Amex" },
+];
+
+export interface Props {
+  isBundle: boolean;
+  oneTime: boolean;
+  titleName: string;
+  name: string;
+  bigImage: string;
+  smallImage: string;
+  quantity: number;
+  avgRating: number;
+  leftInStock: number;
+  price: number;
+  description: string;
+  details: {
+    normal: string;
+    important: string;
+    direction: "t-i" | "i-t";
+  }[];
+  discount?: number;
+  comments: IComment[];
+}
+
+const {
+  oneTime,
+  titleName,
+  isBundle,
+  name,
+  quantity,
+  bigImage,
+  smallImage,
+  avgRating,
+  leftInStock,
+  price,
+  description,
+  details,
+  discount = 0,
+  comments,
+} = Astro.props;
+
+const eachPrice = Math.floor((price - price * (discount / 100)) / quantity);
+---
+
+<article class="px-12">
+  <div class="bg-light-gray rounded p-8">
+    <div class="grid grid-cols-2 gap-6 mb-6">
+      <!-- Big Image -->
+      <div class="flex justify-end">
+        <img src={bigImage} alt={`${name} picture`} />
+      </div>
+      <div>
+        <!-- Title -->
+        <h4 class="text-3xl">
+          {
+            oneTime && (
+              <span class="uppercase text-light-blue">one time only </span>
+            )
+          }
+          {
+            isBundle && discount && (
+              <span class="capitalize leading-normal">
+                special price for {quantity} extra {titleName} for only{" "}
+                <span class="text-light-blue">${eachPrice} each</span> ($
+                {(price - price * (discount / 100)).toFixed(2)} total!)
+              </span>
+            )
+          }
+          {!isBundle && <span>{titleName}</span>}
+        </h4>
+        <div class="flex gap-6">
+          <!-- Small Image -->
+          <div>
+            <img src={smallImage} alt={`${name} picture`} class="w-52" />
+          </div>
+          <!-- Name and Price -->
+          <div class="mb-6">
+            <div class="flex justify-between mb-2">
+              <h6 class="font-medium text-lg">{name}</h6>
+              {!discount && <p>${price}</p>}
+              {
+                discount && (
+                  <div class="flex items-center font-medium gap-2">
+                    <p class="line-through text-discount-gray text-sm">
+                      ${price}
+                    </p>
+                    <p class="text-lg text-light-blue">
+                      ${Math.floor(price - price * (discount / 100))}
+                    </p>
+                  </div>
+                )
+              }
+            </div>
+            <!-- Average Rating -->
+            <div class="flex gap-0.5">
+              {
+                Array(Math.round(avgRating))
+                  .fill(null)
+                  .map((_) => <img src={starRounded.src} alt="Star icon" />)
+              }
+            </div>
+            <!-- Left in Stock -->
+            <div class="flex gap-4 my-4">
+              <img src={checkbox.src} alt="Checkbox icon" />
+              <p class="text-default-gray">{leftInStock} left in Stock</p>
+            </div>
+            <!-- Description -->
+            <p class="text-default-gray">{description}</p>
+          </div>
+        </div>
+        <!-- Details -->
+        <div class="space-y-4 mb-8">
+          {
+            details.map((detail) => (
+              <div class="flex items-center gap-3">
+                <img src={tick.src} alt="Tick icon" class="w-6" />
+                {detail.direction === "t-i" ? (
+                  <p class="text-default-gray">
+                    <span>{detail.normal}</span>{" "}
+                    <span class="font-bold">{detail.important}</span>
+                  </p>
+                ) : (
+                  <p class="text-default-gray">
+                    <span class="font-bold">{detail.important}</span>{" "}
+                    <span>{detail.normal}</span>
+                  </p>
+                )}
+              </div>
+            ))
+          }
+        </div>
+        <!-- Discount -->
+        {
+          discount && (
+            <div>
+              <div class="bg-extra-light-blue p-3 flex items-center gap-4 rounded-xl mb-8">
+                <img src={percentage.src} alt="Percentage icon" />
+                <p class="text-lg">
+                  Save <span class="text-light-blue">{discount}%</span> and get{" "}
+                  <span class="text-light-blue">{quantity}</span> extra{" "}
+                  <span class="text-light-blue">{name}</span> for only{" "}
+                  <span class="text-light-blue">${eachPrice}</span>.
+                </p>
+              </div>
+              <button class="w-full flex gap-4 bg-discount-green items-center justify-center p-4 rounded-full">
+                <p class="uppercase text-white font-medium text-xl">
+                  yes - claim my discount
+                </p>
+                <img src={rightArrow.src} alt="Right arrow icon" />
+              </button>
+            </div>
+          )
+        }
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-6">
+      <!-- Comments -->
+      <div>
+        {
+          comments.map((comment) => (
+            <div class="bg-white py-6 px-4 rounded-lg">
+              <div class="flex gap-2 mb-6">
+                <img
+                  src={comment.user.image}
+                  alt={`${comment.user.username} profile picture`}
+                />
+                <div>
+                  <div class="flex gap-0.5">
+                    {Array(Math.round(avgRating))
+                      .fill(null)
+                      .map((_) => (
+                        <img src={star.src} alt="Star icon" />
+                      ))}
+                  </div>
+                  <div class="flex gap-2">
+                    <p class="font-bold">{comment.user.username}</p>
+                    {comment.user.isVerified && (
+                      <div class="flex gap-3 items-center">
+                        <img src={verify.src} alt="Verify icon" />
+                        <p class="text-verified-green text-sm">
+                          Verified Customer
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <p class="text-default-gray">"{comment.text}"</p>
+            </div>
+          ))
+        }
+      </div>
+      <!-- Info -->
+      <div>
+        <div
+          class="flex p-2 border-[3px] border-gray-300 text-default-gray rounded justify-between items-center"
+        >
+          Free Shipping
+          <div class="w-[1px] h-5 bg-default-gray opacity-40"></div>
+          <div class="flex items-center gap-2">
+            <img src={lock.src} alt="Lock icon" class="w-4" />
+            <p>Secure 256-Bit SSL Encryption.</p>
+          </div>
+          <div class="w-[1px] h-5 bg-default-gray opacity-40"></div>
+          <div class="flex gap-1">
+            {
+              payments.map((payment) => (
+                <img src={payment.icon} alt={payment.alt} class="w-8" />
+              ))
+            }
+          </div>
+        </div>
+        <a
+          href="/"
+          class="block uppercase underline text-red-500 font-medium text-xl text-center my-6"
+          >no thanks, i don&apos;t want this.</a
+        >
+        <!-- Guarantee -->
+        <div class="flex items-center gap-4">
+          <img src={guarantee.src} alt="Guarantee" />
+          <div class="text-default-gray text-lg">
+            <p class="w-11/12">
+              If you are not completely thrilled with your Clarifion - We have a
+
+
+              <span class="font-bold">30 day satisfaction guarantee</span>.
+              Please refer to our return policy at the bottom of the page for
+              more details.
+            </p>
+            <p>Happy Shopping!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

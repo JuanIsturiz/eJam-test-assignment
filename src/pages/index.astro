@@ -1,20 +1,72 @@
 ---
 import Hero from "../components/Hero.astro";
+import Product from "../components/Product.astro";
+import Steps from "../components/Steps.astro";
 import TopBar from "../components/TopBar.tsx";
 import Layout from "../layouts/Layout.astro";
+
+import bigImage from "../assets/images/product-with-details.svg";
+import smallImage from "../assets/images/product.svg";
+import userProfilePicture from "../assets/images/user-profile-picture.svg";
+
+const product: Product = {
+  isBundle: true,
+  oneTime: true,
+  bigImage: bigImage.src,
+  smallImage: smallImage.src,
+  titleName: "Clarifion",
+  name: "Clarifion Air Ionizer",
+  quantity: 6,
+  avgRating: 4.7,
+  leftInStock: 12,
+  price: 180,
+  description:
+    "Simply plug a Clarifion into any standard outlet and replace bulky, expensive air purifiers with a simple.",
+  details: [
+    {
+      normal: "Negative Ion Technology may",
+      important: "help with allergens",
+      direction: "t-i",
+    },
+    {
+      normal: "Designed for",
+      important: "air rejuvenation",
+      direction: "t-i",
+    },
+    {
+      normal: "in all types of places",
+      important: "Perfect for every room",
+      direction: "i-t",
+    },
+  ],
+  discount: 53,
+  comments: [
+    {
+      user: {
+        username: "Ken T.",
+        image: userProfilePicture.src,
+        isVerified: true,
+      },
+      rating: 4.9,
+      text: "As soon as the Clarifions arrived I put one in my bedroom. This was late in the afternoon. When I went to the bedroom in the evening it smelled clean. When I went to bed I felt I could breathe better. Wonderful.",
+    },
+  ],
+};
 ---
 
 <!-- 
-	TopBar, 
-	Hero, 
-	Steps -> steps:{checked, active, label}, 
-	Product:{title, name, bigImage, smallImage, avgRating, leftInStock, price, description, details, discount}, 
-	Discount:{ammount }, 
-	Comments:{comments:[{profileImg, username, rating, isVerified, text}]}, 
-	Info: {payments}, 
-	Policy
+	//todo: TopBar, 
+	//todo: Hero, 
+	// todo: Steps -> steps:[{checked, active, label}], 
+	todo: Product:{title, name, bigImage, smallImage, avgRating, leftInStock, price, description, details, discount}, 
+	todo: Discount:{ammount }, 
+	todo: Comments:{comments:[{profileImg, username, rating, isVerified, text}]}, 
+	todo: Info: {payments}, 
+	todo: Policy
 -->
 <Layout title="eJam Test Assignment">
   <TopBar client:visible />
   <Hero />
+  <Steps />
+  <Product {...product} />
 </Layout>

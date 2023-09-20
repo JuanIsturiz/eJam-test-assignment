@@ -1,0 +1,54 @@
+---
+import stepTick from "../assets/icons/step-tick.svg";
+
+const steps = [
+  {
+    completed: true,
+    active: false,
+    label: "Cart Review",
+  },
+  {
+    completed: true,
+    active: false,
+    label: "Checkout",
+  },
+  {
+    completed: false,
+    active: true,
+    label: "Special Offer",
+  },
+  {
+    completed: false,
+    active: false,
+    label: "Confirmation",
+  },
+];
+---
+
+<div class="flex justify-between px-4 md:px-24 mb-2">
+  {
+    steps.map((step, idx) => (
+      <div class="flex items-center flex-col lg:flex-row gap-1 lg:gap-4">
+        <div
+          class={`${
+            !step.completed
+              ? `bg-white border-[3px] border-light-blue text-light-blue ${
+                  step.active && "!bg-light-blue !text-white"
+                }`
+              : "bg-default-green"
+          } rounded-full w-6 h-6 sm:w-9 sm:h-9 flex items-center justify-center`}
+        >
+          {step.completed ? (
+            <img src={stepTick.src} alt="Tick icon" class="w-3 sm:w-5" />
+          ) : (
+            <p class="font-medium text-xs md:text-lg">{idx + 1}</p>
+          )}
+        </div>
+        <p class={`text-xs md:text-lg ${step.active && "font-bold"}`}>
+          <span class="hidden lg:inline">Step {idx + 1}: </span>
+          {step.label}
+        </p>
+      </div>
+    ))
+  }
+</div>
